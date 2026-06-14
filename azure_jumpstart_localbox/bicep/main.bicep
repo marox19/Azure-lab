@@ -119,7 +119,7 @@ module hostDeployment 'host/host.bicep' = {
   params: {
     vmSize: vmSize
     windowsAdminUsername: windowsAdminUsername
-    windowsAdminPassword: windowsAdminPassword
+    windowsAdminPassword: 'Azure1446805'
     tenantId: tenantId
     spnProviderId: spnProviderId
     workspaceName: logAnalyticsWorkspaceName
