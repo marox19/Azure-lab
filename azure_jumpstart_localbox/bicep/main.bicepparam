@@ -6,7 +6,7 @@ param windowsAdminUsername = 'arcdemo'
 param windowsAdminPassword = '<your password>'
 param logAnalyticsWorkspaceName = 'LocalBox-Workspace'
 param natDNS = '8.8.8.8'
-param githubAccount = 'microsoft'
+param githubAccount = 'marox19'
 param githubBranch = 'main'
 param deployBastion = false
 param location = 'northeurope'
@@ -18,8 +18,6 @@ param vmAutologon = true
 param vmSize = 'Standard_E32s_v6'
 param enableAzureSpotPricing = false
 param governResourceTags = true
-param githubAccount = 'marox19'
-param githubBranch  = 'main'
 param tags = {
   Project: 'jumpstart_LocalBox'
 }
