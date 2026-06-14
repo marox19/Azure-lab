@@ -18,7 +18,7 @@ param vmAutologon = true
 param vmSize = 'Standard_E32s_v6'
 param enableAzureSpotPricing = false
 param governResourceTags = true
-param githubAccount = 'microsoft'
+param githubAccount = 'marox19'
 param githubBranch  = 'main'
 param tags = {
   Project: 'jumpstart_LocalBox'
