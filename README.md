@@ -1,74 +1,81 @@
-[![Stale Branches](https://github.com/microsoft/azure_arc/actions/workflows/stale-branches.yml/badge.svg)](https://github.com/microsoft/azure_arc/actions/workflows/stale-branches.yml)
+# Event Registration app — source code
 
-# ⚡ Arc Jumpstart source code
+A simple event registration web app that runs in any modern browser.
 
-Welcome to the Arc Jumpstart source code repository! This repository is your go-to resource for working with and contributing to the Arc Jumpstart automation scripts and tools and acts as the backend source code repository which complements our [documentation repository](https://github.com/Azure/arc_jumpstart_docs) that eventually populates the [Arc Jumpstart](https://aka.ms/arcjumpstart) website.
+- **Register** page (`/`) — a form with Full name, Email, Phone number and Company name
+  (required) and Details (optional). Fields are validated, and the attendee sees a
+  confirmation after submitting. An attendee pass next to the form fills in as they type.
+- **Admin** page (`/?view=admin`) — every submitted form is shown as its own entry card
+  with name, company, email, phone, details and submission time, newest first, with a
+  total count and a delete button (asks for confirmation).
 
-<p align="center">
-  <img src="https://github.com/Azure/arc_jumpstart_docs/raw/main/img/logo/jumpstart.png" alt="Arc Jumpstart logo" width="320">
-</p>
+Built with **React 19 + TypeScript + Vite + Tailwind CSS**.
 
-**Note:** This repository does not contain the source code for the documentation of the Arc Jumpstart which can be found in another [dedicated repository](https://github.com/Azure/arc_jumpstart_docs).
+## Where the app's code is
 
-## 📦 What you'll find here
+| File | What it contains |
+| --- | --- |
+| `src/pages/home.tsx` | The registration form and validation, the attendee pass, and the admin view |
+| `src/components/app-shell.tsx` | The top bar with the Register / Admin navigation |
+| `src/data/registrations.ts` | The `Registration` data shape and 10 sample registrations |
+| `src/index.css` | Colors and theme (light and dark) |
 
-- **Automation Source Code:** Arc Jumpstart automation scripts and tools utilized in our scenarios and solutions.
-- **Supportive Documents and Files:** Additional resources used across the [Arc Jumpstart](https://aka.ms/ArcJumpstart) website, aiding in various contexts and providing supplemental information.
+Everything else is the standard project template (UI components and build configuration).
 
-## 🛠️ How to Utilize this repository
+## Run it on your computer
 
-This source code repository is designed with contributors in mind and works in tandem with the [our documentation repository](https://github.com/Azure/arc_jumpstart_docs). While it's not mandatory, it's highly likely that contributors will need to clone both repositories to effectively contribute to Arc Jumpstart.
-
-Before you start, we recommend familiarizing yourself with our comprehensive [contribution guidelines](https://aka.ms/JumpstartContribution). These guidelines outline the standards and practices we follow, ensuring consistency and quality across our documentation.
-
-If you're unsure about your future contribution, don't hesitate to start a [GitHub discussion](https://aka.ms/JumpstartDiscussions). This is a great place to ask questions, share ideas, or get feedback on potential contributions. Our community is here to help and we welcome all levels of experience.
-
-Happy contributing!
-
-## 📥 Cloning the repositories
-
-To contribute, you'll likely need to clone both this repository and the [documentation repository](https://github.com/Azure/arc_jumpstart_docs). Use the following commands:
+Requires [Node.js](https://nodejs.org/) 20 or later.
 
 ```bash
-git clone https://github.com/microsoft/azure_arc.git
-git clone https://github.com/Azure/arc_jumpstart_docs.git
+npm install
+npm run dev
 ```
 
-As we continuously improve and expand Arc Jumpstart, we recommend keeping your local clones of the repositories up-to-date. You can do this by pulling the latest changes from the main branch:
+Then open the address Vite prints (usually http://localhost:5173).
+
+## Build it for hosting
 
 ```bash
-git pull origin main
+npm run build
 ```
 
-You can use partial clones if you want to reduce the time and size it takes to clone this repository. By default, when you clone this repository, you get all the files and their associated metadata, including blobs and diff history. However, if you don't need all of this information, you can use the following command to clone the repository without the blobs:
+This produces a static website in the `dist/` folder that you can host on any static web
+host (for example Azure Static Web Apps, Azure App Service, IIS or Nginx). The admin view
+is selected with a query string (`?view=admin`), so no server rewrite rules are needed.
 
-```bash
-git clone --filter=blob:none https://github.com/microsoft/azure_arc
-```
+## Important: where registrations are stored
 
-## 🙌 Contribution and feedback
+This version keeps registrations **in the browser's memory only**:
 
-We value your input! If you have suggestions, feedback, or valuable insights to share, feel free to open an issue. Your contributions help us improve the documentation for the entire community.
+- they are lost when the page is refreshed or closed, and
+- people registering on their own devices are not visible in someone else's admin view.
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit the [Microsoft Contributor License Agreements website](https://cla.opensource.microsoft.com).
+To use it for a real event, connect it to a data store:
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+1. **SharePoint list (Microsoft 365)** — ask Copilot to "save this app's data to
+   SharePoint". Registrations are then stored in a SharePoint list, and SharePoint
+   permissions control who can see them.
+2. **Your own backend** — replace the `useState` list in `HomePage`
+   (`src/pages/home.tsx`) with calls to your API (save on submit, load in the admin view,
+   delete from the admin view).
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+To start with an empty list instead of the sample registrations, change
+`sampleRegistrations` in `src/data/registrations.ts` to an empty array (`[]`).
 
-## 📑 Repository Policies
+## Who can open the admin view
 
-See [REPO_POLICIES.md](./REPO_POLICIES.md) for details on automated pull request and issue management policies.
+Anyone who can open the app can open the Admin view. Before collecting real attendee
+data, restrict it — for example with SharePoint list permissions, or with sign-in on the
+site that hosts the app.
 
-## 🏷️ Trademarks
+## Running outside Microsoft 365
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
+The published version of this app runs inside Microsoft 365. When you run it anywhere
+else (for example `npm run dev` on your PC), the browser console may show
+`[channel] Handshake timed out` about 30 seconds after the page loads. That message is
+harmless: it refers to the Microsoft 365 host connection, which only exists when the app
+runs there. The form and admin view work normally.
 
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+`ms.config.json` links this project to your published app. To change the published
+version, ask Copilot to update the app, or use the Microsoft managed apps CLI
+(`npm install -g @microsoft/managed-apps-cli`, then `ms --help`).
